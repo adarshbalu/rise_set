@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:rise_set/core/usecases/usecase.dart';
 import 'package:rise_set/features/rise_set/domain/entities/rise_set.dart';
 import 'package:rise_set/features/rise_set/domain/repositories/rise_set_repository.dart';
 import 'package:rise_set/features/rise_set/domain/usecases/get_rise_and_set_time.dart';
@@ -21,7 +22,7 @@ void main() {
   test('should get RiseSet from repository', () async {
     when(mockRiseSetRepository.getRiseAndSetTime())
         .thenAnswer((_) async => Right(riseSet));
-    final result = await usecase.execute();
+    final result = await usecase.call(NoParams());
     expect(result, Right(riseSet));
     verify(mockRiseSetRepository.getRiseAndSetTime());
     verifyNoMoreInteractions(mockRiseSetRepository);
