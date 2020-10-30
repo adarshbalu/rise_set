@@ -22,4 +22,16 @@ void main() {
       expect(result, tRiseSetModel);
     });
   });
+  group('to Json', () async {
+    test('should return a json map containing proper data', () async {
+      final result = tRiseSetModel.toJson();
+      final expectedJsonMap = {
+        'results': {
+          'sunrise': DateTime(2010).toString(),
+          'sunset': DateTime(2012).toString()
+        }
+      };
+      expect(result, expectedJsonMap);
+    });
+  });
 }

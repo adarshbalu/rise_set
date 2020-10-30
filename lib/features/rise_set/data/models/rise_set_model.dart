@@ -8,4 +8,10 @@ class RiseSetModel extends RiseSet {
     return RiseSetModel(
         sunrise: json['results']['sunrise'], sunset: json['results']['sunset']);
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'results': {'sunrise': sunrise.toString(), 'sunset': sunset.toString()}
+    };
+  }
 }
