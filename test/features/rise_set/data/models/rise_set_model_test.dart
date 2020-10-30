@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:rise_set/features/rise_set/data/models/rise_set_model.dart';
 import 'package:rise_set/features/rise_set/domain/entities/rise_set.dart';
+
+import '../../../../fixtures/fixture_reader.dart';
 
 void main() {
   final tSunrise = DateTime(2020);
@@ -9,5 +13,13 @@ void main() {
 
   test('should be a subclass of RiseSet entity', () async {
     expect(tRiseSetModel, isA<RiseSet>());
+  });
+
+  group('from Json', () async {
+    test('should return a valid model when json is dateTime', () async {
+      final Map<String, dynamic> jsonMap = jsonDecode(fixture('rise_set.json'));
+      final result = RiseSetModel.fromJson(jsonMap);
+      expect(result, tRiseSetModel);
+    });
   });
 }

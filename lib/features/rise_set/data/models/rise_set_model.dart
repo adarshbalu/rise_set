@@ -4,7 +4,8 @@ class RiseSetModel extends RiseSet {
   RiseSetModel({DateTime sunrise, DateTime sunset})
       : super(sunrise: sunrise, sunset: sunset);
 
-  factory RiseSetModel.fromJson() {
-    return RiseSetModel();
+  factory RiseSetModel.fromJson(Map<String, dynamic> json) {
+    return RiseSetModel(
+        sunrise: json['results']['sunrise'], sunset: json['results']['sunset']);
   }
 }
