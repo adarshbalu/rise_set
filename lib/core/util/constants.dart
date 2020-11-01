@@ -1,0 +1,1 @@
+const String CACHED_RISE_SET = 'CACHED_RISE_SET';
