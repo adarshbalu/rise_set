@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
+import 'package:rise_set/core/error/exceptions.dart';
+import 'package:rise_set/core/util/constants.dart';
 import 'package:rise_set/features/rise_set/data/models/rise_set_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -13,8 +17,12 @@ class RiseSetLocalDataSourceImpl extends RiseSetLocalDataSource {
   RiseSetLocalDataSourceImpl({@required this.sharedPreferences});
   @override
   Future<void> cacheRiseSetTimes(RiseSetModel riseSetModelToCache) {
-    // TODO: implement cacheRiseSetTimes
-    throw UnimplementedError();
+    final jsonString = sharedPreferences.getString(CACHED_RISE_SET);
+    if (jsonString != null) {
+      return Future.value(RiseSetModel.fromJson(jsonDecode(jsonString)));
+    } else {
+      throw CacheException();
+    }
   }
 
   @override
