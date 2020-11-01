@@ -11,46 +11,48 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../fixtures/fixture_reader.dart';
 
-class MockSharedPreferences extends Mock implements SharedPreferences {
-  void main() {
-    RiseSetLocalDataSourceImpl dataSource;
-    MockSharedPreferences mockSharedPreference;
+class MockSharedPreferences extends Mock implements SharedPreferences {}
 
-    setUp(() {
-      mockSharedPreference = MockSharedPreferences();
-      dataSource =
-          RiseSetLocalDataSourceImpl(sharedPreferences: mockSharedPreference);
+void main() {
+  RiseSetLocalDataSourceImpl dataSource;
+  MockSharedPreferences mockSharedPreference;
+
+  setUp(() {
+    mockSharedPreference = MockSharedPreferences();
+    dataSource =
+        RiseSetLocalDataSourceImpl(sharedPreferences: mockSharedPreference);
+  });
+
+  group('getLastRiseSetTimes', () {
+    final tRiseSetModel = RiseSetModel(
+        sunset: DateTime.parse('2015-05-21T19:22:59+00:00'),
+        sunrise: DateTime.parse('2015-05-21T05:05:35+00:00'));
+
+    test('should return a riseSet from SP when there is in cache', () async {
+      when(mockSharedPreference.getString(any))
+          .thenReturn(fixture('rise_set_cached.json'));
+      final result = await dataSource.getLastRiseSetTimes();
+      verify(mockSharedPreference.getString(CACHED_RISE_SET));
+      expect(result, equals(tRiseSetModel));
     });
 
-    group('getLastRiseSetTimes', () {
-      final tRiseSetModel =
-          RiseSetModel(sunset: DateTime(2010), sunrise: DateTime(2012));
-
-      test('should return a riseSet from SP when there is in cache', () async {
-        when(mockSharedPreference.getString(any))
-            .thenReturn(fixture('rise_set_cached.json'));
-        final result = await dataSource.getLastRiseSetTimes();
-        verify(mockSharedPreference.getString(CACHED_RISE_SET));
-        expect(result, equals(tRiseSetModel));
-      });
-
-      test('should throw a cacheException when there is no data in cache', () {
-        when(mockSharedPreference.getString(any)).thenReturn(null);
-        final call = dataSource.getLastRiseSetTimes;
-        expect(() => call(), throwsA(TypeMatcher<CacheException>()));
-      });
+    test('should throw a cacheException when there is no data in cache', () {
+      when(mockSharedPreference.getString(any)).thenReturn(null);
+      final call = dataSource.getLastRiseSetTimes;
+      expect(() => call(), throwsA(TypeMatcher<CacheException>()));
     });
+  });
 
-    group('cacheRiseSet data', () {
-      final tRiseSetModel =
-          RiseSetModel(sunset: DateTime(2010), sunrise: DateTime(2012));
+  group('cacheRiseSet data', () {
+    final tRiseSetModel = RiseSetModel(
+        sunset: DateTime.parse('2015-05-21T19:22:59+00:00'),
+        sunrise: DateTime.parse('2015-05-21T05:05:35+00:00'));
 
-      test('should call SP to cache data', () {
-        dataSource.cacheRiseSetTimes(tRiseSetModel);
-        final expectedJsonString = jsonEncode(tRiseSetModel.toJson());
-        verify(mockSharedPreference.setString(
-            CACHED_RISE_SET, expectedJsonString));
-      });
+    test('should call SP to cache data', () {
+      dataSource.cacheRiseSetTimes(tRiseSetModel);
+      final expectedJsonString = jsonEncode(tRiseSetModel.toJson());
+      verify(
+          mockSharedPreference.setString(CACHED_RISE_SET, expectedJsonString));
     });
-  }
+  });
 }

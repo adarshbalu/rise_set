@@ -6,12 +6,16 @@ class RiseSetModel extends RiseSet {
 
   factory RiseSetModel.fromJson(Map<String, dynamic> json) {
     return RiseSetModel(
-        sunrise: json['results']['sunrise'], sunset: json['results']['sunset']);
+        sunrise: DateTime.parse(json['results']['sunrise']),
+        sunset: DateTime.parse(json['results']['sunset']));
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'results': {'sunrise': sunrise.toString(), 'sunset': sunset.toString()}
+      'results': {
+        'sunrise': sunrise.toIso8601String(),
+        'sunset': sunset.toIso8601String()
+      }
     };
   }
 }
