@@ -17,17 +17,17 @@ class RiseSetLocalDataSourceImpl extends RiseSetLocalDataSource {
   RiseSetLocalDataSourceImpl({@required this.sharedPreferences});
   @override
   Future<void> cacheRiseSetTimes(RiseSetModel riseSetModelToCache) {
+    return sharedPreferences.setString(
+        CACHED_RISE_SET, jsonEncode(riseSetModelToCache));
+  }
+
+  @override
+  Future<RiseSetModel> getLastRiseSetTimes() {
     final jsonString = sharedPreferences.getString(CACHED_RISE_SET);
     if (jsonString != null) {
       return Future.value(RiseSetModel.fromJson(jsonDecode(jsonString)));
     } else {
       throw CacheException();
     }
-  }
-
-  @override
-  Future<RiseSetModel> getLastRiseSetTimes() {
-    // TODO: implement getLastRiseSetTimes
-    throw UnimplementedError();
   }
 }
