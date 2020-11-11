@@ -4,7 +4,7 @@ import 'package:rise_set/core/error/failures.dart';
 class InputConverter {
   Either<Failure, double> stringToDouble(String str) {
     try {
-      final dou = double.tryParse(str);
+      final dou = double.parse(str);
       if (dou.isNaN) throw FormatException();
       return Right(dou);
     } on FormatException {
