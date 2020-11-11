@@ -56,7 +56,7 @@ void main() {
     );
 
     test(
-      'should return NumberTrivia when the response code is 200 (success)',
+      'should return RiseSet when the response code is 200 (success)',
       () async {
         // arrange
         setUpMockHttpClientSuccess200();

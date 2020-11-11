@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:meta/meta.dart';
+import 'package:rise_set/core/error/exceptions.dart';
 import 'package:rise_set/core/error/failures.dart';
 import 'package:rise_set/core/network/network_info.dart';
 import 'package:rise_set/features/rise_set/data/datasources/rise_set_local_datasource.dart';
@@ -20,8 +21,23 @@ class RiseSetRepositoryImpl implements RiseSetRepository {
 
   @override
   Future<Either<Failure, RiseSet>> getRiseAndSetTime(
-      double latitude, double longitude) {
-    // TODO: implement getRiseAndSetTime
-    throw UnimplementedError();
+      double latitude, double longitude) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final remoteRiseSet =
+            await remoteDataSource.getRiseAndSetTime(latitude, longitude);
+        localDataSource.cacheRiseSetTimes(remoteRiseSet);
+        return Right(remoteRiseSet);
+      } on ServerException {
+        return Left(ServerFailure());
+      }
+    } else {
+      try {
+        final localRiseSet = await localDataSource.getLastRiseSetTimes();
+        return Right(localRiseSet);
+      } on CacheException {
+        return Left(CacheFailure());
+      }
+    }
   }
 }
