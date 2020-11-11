@@ -8,7 +8,6 @@ import 'package:rise_set/features/rise_set/data/datasources/rise_set_local_datas
 import 'package:rise_set/features/rise_set/data/datasources/rise_set_remote_datasource.dart';
 import 'package:rise_set/features/rise_set/data/models/rise_set_model.dart';
 import 'package:rise_set/features/rise_set/data/repositories/rise_set_repository_impl.dart';
-import 'package:rise_set/features/rise_set/domain/entities/rise_set.dart';
 
 class MockRemoteDataSource extends Mock implements RiseSetRemoteDataSource {}
 
@@ -56,7 +55,7 @@ void main() {
     final tlat = 1.0, tLong = 1.0;
     final tRiseSetModel =
         RiseSetModel(sunrise: DateTime(2020), sunset: DateTime(2021));
-    final RiseSet riseSet = tRiseSetModel;
+    // final RiseSet riseSet = tRiseSetModel;
 
     test(
       'should check if the device is online',
