@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:rise_set/features/rise_set/presentation/providers/rise_set_provider.dart';
+import 'package:provider/provider.dart';
+import '../../../../../core/util/constants.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -8,6 +11,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+    RiseSetProvider riseSetProvider = context.watch<RiseSetProvider>();
+
     return Scaffold(
       bottomNavigationBar: Text(
         'Rise and Set Times',
@@ -19,6 +24,7 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            //buildLoading(),
             SingleChildScrollView(child: buildResult(context)),
             SizedBox(
               height: 16,
@@ -31,10 +37,19 @@ class _HomePageState extends State<HomePage> {
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
                       decoration: InputDecoration(
-                          hintText: 'Latitude',
-                          border: OutlineInputBorder(),
-                          focusedBorder: OutlineInputBorder(),
-                          enabledBorder: OutlineInputBorder()),
+                        filled: true,
+                        fillColor: Colors.white,
+                        hintText: 'Latitude',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4.0),
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -43,10 +58,19 @@ class _HomePageState extends State<HomePage> {
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
                         decoration: InputDecoration(
-                            hintText: 'Longitude',
-                            border: OutlineInputBorder(),
-                            focusedBorder: OutlineInputBorder(),
-                            enabledBorder: OutlineInputBorder()),
+                          filled: true,
+                          fillColor: Colors.white,
+                          hintText: 'Longitude',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4.0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4.0),
+                          ),
+                        ),
                       )),
                 ),
               ],
@@ -59,13 +83,38 @@ class _HomePageState extends State<HomePage> {
               padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15)),
-              color: Colors.orange,
+              color: ColorConstants.DEEP_BLUE,
               textColor: Colors.white,
               onPressed: () {},
               child: Text('Get Rise and Set Time'),
             )
           ],
         ),
+      ),
+    );
+  }
+
+  Widget buildLoading() {
+    return Center(
+      child: Column(
+        children: [
+          Image.asset(
+            LOGO_PNG_LOCATION,
+            height: 100,
+            width: 100,
+          ),
+          SizedBox(
+            height: 16,
+          ),
+          CircularProgressIndicator(
+            valueColor:
+                AlwaysStoppedAnimation<Color>(ColorConstants.LIGHT_YELLOW),
+            backgroundColor: ColorConstants.DARK_YELLOW,
+          ),
+          SizedBox(
+            height: 8,
+          ),
+        ],
       ),
     );
   }

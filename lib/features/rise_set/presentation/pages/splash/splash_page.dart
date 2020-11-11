@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rise_set/core/util/constants.dart';
 
 class SplashPage extends StatelessWidget {
   @override
@@ -15,7 +16,12 @@ class SplashPage extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: Container(
-          margin: EdgeInsets.all(8), child: LinearProgressIndicator()),
+          margin: EdgeInsets.all(8),
+          child: LinearProgressIndicator(
+            valueColor:
+                AlwaysStoppedAnimation<Color>(ColorConstants.LIGHT_YELLOW),
+            backgroundColor: ColorConstants.DARK_YELLOW,
+          )),
     );
   }
 }
