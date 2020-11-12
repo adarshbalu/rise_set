@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:rise_set/features/rise_set/presentation/providers/rise_set_provider.dart';
 import 'package:provider/provider.dart';
 import '../../../../../core/util/constants.dart';
@@ -9,6 +11,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  TextEditingController latitude, longitude;
+  @override
+  void initState() {
+    latitude = TextEditingController();
+    longitude = TextEditingController();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     RiseSetProvider riseSetProvider = context.watch<RiseSetProvider>();
@@ -24,8 +34,7 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            //buildLoading(),
-            SingleChildScrollView(child: buildResult(context)),
+            mapEvent(riseSetProvider.status),
             SizedBox(
               height: 16,
             ),
@@ -36,6 +45,7 @@ class _HomePageState extends State<HomePage> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
+                      keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
@@ -50,6 +60,7 @@ class _HomePageState extends State<HomePage> {
                           borderRadius: BorderRadius.circular(4.0),
                         ),
                       ),
+                      controller: latitude,
                     ),
                   ),
                 ),
@@ -57,6 +68,8 @@ class _HomePageState extends State<HomePage> {
                   child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
+                        controller: longitude,
+                        keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.white,
@@ -85,7 +98,12 @@ class _HomePageState extends State<HomePage> {
                   borderRadius: BorderRadius.circular(15)),
               color: ColorConstants.DEEP_BLUE,
               textColor: Colors.white,
-              onPressed: () {},
+              onPressed: () async {
+                await riseSetProvider.getInput(latitude.text, longitude.text);
+
+                longitude.clear();
+                latitude.clear();
+              },
               child: Text('Get Rise and Set Time'),
             )
           ],
@@ -120,11 +138,109 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget buildResult(BuildContext context) {
+    RiseSetProvider riseSetProvider = context.watch<RiseSetProvider>();
+    final DateFormat format = DateFormat.jm();
+    String sunRise = format.format(riseSetProvider.riseSet.sunrise.toLocal());
+    String sunSet = format.format(riseSetProvider.riseSet.sunset.toLocal());
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Placeholder(
-        fallbackHeight: 300,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Card(
+              child: Container(
+                  height: 130,
+                  width: 130,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(child: SvgPicture.asset('assets/svg/rise.svg')),
+                      SizedBox(
+                        height: 16,
+                      ),
+                      Text(sunRise),
+                      SizedBox(
+                        height: 8,
+                      ),
+                    ],
+                  ))),
+          Card(
+              child: Container(
+                  height: 130,
+                  width: 130,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(child: SvgPicture.asset('assets/svg/set.svg')),
+                      SizedBox(
+                        height: 16,
+                      ),
+                      Text(sunSet),
+                      SizedBox(
+                        height: 8,
+                      ),
+                    ],
+                  ))),
+        ],
       ),
     );
+  }
+
+  Widget buildEmpty() {
+    return Container(
+      child: Column(
+        children: [
+          Image.asset(
+            LOGO_PNG_LOCATION,
+            height: 100,
+            width: 100,
+          ),
+          SizedBox(
+            height: 16,
+          ),
+          Text(
+            'Add values to search',
+            style: Theme.of(context).textTheme.headline6,
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget buildError(BuildContext context) {
+    RiseSetProvider riseSetProvider = context.watch<RiseSetProvider>();
+    return Container(
+      child: Column(
+        children: [
+          Image.asset(
+            LOGO_PNG_LOCATION,
+            height: 100,
+            width: 100,
+          ),
+          SizedBox(
+            height: 16,
+          ),
+          Text(
+            'Error Occurred',
+            style: Theme.of(context).textTheme.headline6,
+          ),
+          Text(
+            riseSetProvider.error,
+            style: Theme.of(context).textTheme.subtitle1,
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget mapEvent(Status status) {
+    if (status == Status.EMPTY) {
+      return buildEmpty();
+    } else if (status == Status.ERROR) {
+      return buildError(context);
+    } else if (status == Status.LOADED) {
+      return buildResult(context);
+    } else
+      return buildLoading();
   }
 }

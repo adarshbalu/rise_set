@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rise_set/features/rise_set/presentation/pages/home/home_page.dart';
-import 'package:rise_set/features/rise_set/presentation/pages/splash/splash_page.dart';
 import 'package:rise_set/features/rise_set/presentation/providers/rise_set_provider.dart';
 import 'dependency_container.dart' as di;
 

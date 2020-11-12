@@ -9,7 +9,7 @@ import 'package:rise_set/features/rise_set/domain/usecases/get_rise_and_set_time
 class RiseSetProvider extends ChangeNotifier with EquatableMixin {
   final GetRiseAndSetTime getRiseAndSetTime;
   final InputConverter inputConverter;
-  Status _status;
+  Status _status = Status.EMPTY;
   String _errorMessage;
   RiseSet _riseSet;
   RiseSetProvider(this.getRiseAndSetTime, this.inputConverter)
@@ -19,7 +19,7 @@ class RiseSetProvider extends ChangeNotifier with EquatableMixin {
   Status get status => _status;
   String get error => _errorMessage;
   RiseSet get riseSet => _riseSet;
-  void getInput(String latitude, String longitude) async {
+  Future<void> getInput(String latitude, String longitude) async {
     _status = Status.LOADING;
     notifyListeners();
     final failureOrLatitude = inputConverter.stringToDouble(latitude);

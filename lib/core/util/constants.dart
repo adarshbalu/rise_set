@@ -6,7 +6,7 @@ const String CACHE_FAILURE_MESSAGE = 'Cache Failure';
 const String INVALID_INPUT_FAILURE_MESSAGE =
     'Invalid Input - The number must be a double or zero.';
 
-enum Status { LOADED, ERROR, LOADING }
+enum Status { LOADED, ERROR, LOADING, EMPTY }
 
 class ColorConstants {
   static const Color DEEP_BLUE = Color(0xff00C0F1);
