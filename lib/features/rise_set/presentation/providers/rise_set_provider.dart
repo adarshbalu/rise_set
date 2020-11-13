@@ -19,7 +19,8 @@ class RiseSetProvider extends ChangeNotifier with EquatableMixin {
   Status get status => _status;
   String get error => _errorMessage;
   RiseSet get riseSet => _riseSet;
-  Future<void> getRiseSetTimes(String latitude, String longitude) async {
+  Future<void> getRiseSetTimesFromInput(
+      String latitude, String longitude) async {
     _status = Status.LOADING;
     notifyListeners();
     final failureOrLatitude = inputConverter.stringToDouble(latitude);
@@ -32,7 +33,7 @@ class RiseSetProvider extends ChangeNotifier with EquatableMixin {
         _errorMessage = _mapFailureToMessage(inputFailure);
         notifyListeners();
       },
-      (validLatitude) async {
+      (validLatitude) {
         failureOrLongitude.fold((inputFailure) {
           _riseSet = null;
           _status = Status.ERROR;
@@ -65,6 +66,8 @@ class RiseSetProvider extends ChangeNotifier with EquatableMixin {
         return SERVER_FAILURE_MESSAGE;
       case CacheFailure:
         return CACHE_FAILURE_MESSAGE;
+      case InvalidInputFailure:
+        return INVALID_INPUT_FAILURE_MESSAGE;
       default:
         return 'Unexpected error';
     }

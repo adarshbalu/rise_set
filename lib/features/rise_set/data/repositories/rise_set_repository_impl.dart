@@ -26,7 +26,7 @@ class RiseSetRepositoryImpl implements RiseSetRepository {
       try {
         final remoteRiseSet =
             await remoteDataSource.getRiseAndSetTime(latitude, longitude);
-        localDataSource.cacheRiseSetTimes(remoteRiseSet);
+        await localDataSource.cacheRiseSetTimes(remoteRiseSet);
         return Right(remoteRiseSet);
       } on ServerException {
         return Left(ServerFailure());

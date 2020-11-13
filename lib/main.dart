@@ -4,10 +4,10 @@ import 'package:rise_set/features/rise_set/presentation/pages/home/home_page.dar
 import 'package:rise_set/features/rise_set/presentation/providers/rise_set_provider.dart';
 import 'dependency_container.dart' as di;
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  di.init();
+  await di.init();
   runApp(MyApp());
 }
 
@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (_) => di.locator<RiseSetProvider>(),
-          lazy: true,
+          lazy: false,
         ),
       ],
       child: MaterialApp(
