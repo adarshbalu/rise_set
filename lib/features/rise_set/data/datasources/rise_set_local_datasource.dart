@@ -18,7 +18,7 @@ class RiseSetLocalDataSourceImpl extends RiseSetLocalDataSource {
   @override
   Future<void> cacheRiseSetTimes(RiseSetModel riseSetModelToCache) {
     return sharedPreferences.setString(
-        CACHED_RISE_SET, jsonEncode(riseSetModelToCache));
+        CACHED_RISE_SET, jsonEncode(riseSetModelToCache.toJson()));
   }
 
   @override

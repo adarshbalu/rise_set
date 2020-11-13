@@ -99,7 +99,8 @@ class _HomePageState extends State<HomePage> {
               color: ColorConstants.DEEP_BLUE,
               textColor: Colors.white,
               onPressed: () async {
-                await riseSetProvider.getInput(latitude.text, longitude.text);
+                await riseSetProvider.getRiseSetTimes(
+                    latitude.text, longitude.text);
 
                 longitude.clear();
                 latitude.clear();
