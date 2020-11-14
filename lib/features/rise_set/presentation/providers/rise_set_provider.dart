@@ -25,39 +25,55 @@ class RiseSetProvider extends ChangeNotifier with EquatableMixin {
     notifyListeners();
     final failureOrLatitude = inputConverter.stringToDouble(latitude);
     final failureOrLongitude = inputConverter.stringToDouble(longitude);
-
+    double validLatitudeValue, validLongitudeValue;
     failureOrLatitude.fold(
       (inputFailure) {
         _riseSet = null;
         _status = Status.ERROR;
         _errorMessage = _mapFailureToMessage(inputFailure);
         notifyListeners();
+        return;
       },
       (validLatitude) {
-        failureOrLongitude.fold((inputFailure) {
-          _riseSet = null;
-          _status = Status.ERROR;
-          _errorMessage = _mapFailureToMessage(inputFailure);
-          notifyListeners();
-        }, (validLongitude) async {
-          final failureOrRiseSet = await getRiseAndSetTime(
-              Params(latitude: validLatitude, longitude: validLongitude));
-          failureOrRiseSet.fold(
-            (failure) {
-              _riseSet = null;
-              _status = Status.ERROR;
-              _errorMessage = _mapFailureToMessage(failure);
-              notifyListeners();
-            },
-            (riseSet) {
-              _riseSet = riseSet;
-              _status = Status.LOADED;
-              notifyListeners();
-            },
-          );
-        });
+        validLatitudeValue = validLatitude;
       },
     );
+    failureOrLongitude.fold((inputFailure) {
+      _riseSet = null;
+      _status = Status.ERROR;
+      _errorMessage = _mapFailureToMessage(inputFailure);
+      notifyListeners();
+      return;
+    }, (validLongitude) async {
+      validLongitudeValue = validLongitude;
+    });
+    if (validLongitudeValue != null && validLatitudeValue != null) {
+      final failureOrRiseSet = await getRiseAndSetTime(
+          Params(latitude: validLatitudeValue, longitude: validLongitudeValue));
+
+      failureOrRiseSet.fold(
+        (failure) {
+          _riseSet = null;
+          _status = Status.ERROR;
+          _errorMessage = _mapFailureToMessage(failure);
+          notifyListeners();
+          return;
+        },
+        (riseSet) {
+          _riseSet = riseSet;
+          _status = Status.LOADED;
+          notifyListeners();
+        },
+      );
+    } else {
+      _riseSet = null;
+      _status = Status.ERROR;
+
+      notifyListeners();
+
+      return;
+    }
+    notifyListeners();
   }
 
   String _mapFailureToMessage(Failure failure) {
