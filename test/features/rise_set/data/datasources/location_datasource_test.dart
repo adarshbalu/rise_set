@@ -3,7 +3,8 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:location/location.dart';
 import 'package:mockito/mockito.dart';
-
+import 'package:matcher/matcher.dart';
+import 'package:rise_set/core/error/exceptions.dart';
 import 'package:rise_set/features/rise_set/data/datasources/location_datasource.dart';
 import 'package:rise_set/features/rise_set/data/models/location_model.dart';
 
@@ -38,6 +39,11 @@ void main() {
           .thenAnswer((_) async => locationData);
       final result = await dataSource.getCurrentUserLocation();
       expect(result, equals(tLocation));
+    });
+    test('should throw location exception if location not available', () async {
+      when(mockLocationInfo.getLocation()).thenReturn(null);
+      final call = dataSource.getCurrentUserLocation;
+      expect(() => call(), throwsA(TypeMatcher<LocationException>()));
     });
   });
 }

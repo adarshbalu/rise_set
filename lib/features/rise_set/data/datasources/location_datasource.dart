@@ -1,5 +1,6 @@
 import 'package:location/location.dart';
 import 'package:meta/meta.dart';
+import 'package:rise_set/core/error/exceptions.dart';
 import 'package:rise_set/features/rise_set/data/models/location_model.dart';
 
 abstract class LocationDataSource {
@@ -13,6 +14,9 @@ class LocationDataSourceImpl extends LocationDataSource {
   @override
   Future<LocationModel> getCurrentUserLocation() async {
     final locationData = await location.getLocation();
-    return LocationModel.fromLocationData(locationData);
+    if (locationData == null) {
+      throw LocationException();
+    } else
+      return LocationModel.fromLocationData(locationData);
   }
 }
