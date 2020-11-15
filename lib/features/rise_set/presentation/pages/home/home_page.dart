@@ -24,6 +24,21 @@ class _HomePageState extends State<HomePage> {
     RiseSetProvider riseSetProvider = context.watch<RiseSetProvider>();
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        elevation: 0,
+        actions: [
+          IconButton(
+              icon: Icon(
+                Icons.my_location,
+                color: Colors.blue,
+                size: 30,
+              ),
+              onPressed: () async {
+                await riseSetProvider.getRiseAndSetTimeFromMyLocation();
+              })
+        ],
+      ),
       bottomNavigationBar: Text(
         'Rise and Set Times',
         textAlign: TextAlign.center,

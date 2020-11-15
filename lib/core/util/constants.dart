@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 const String CACHED_RISE_SET = 'CACHED_RISE_SET';
 const String SERVER_FAILURE_MESSAGE = 'Server Failure';
 const String CACHE_FAILURE_MESSAGE = 'Cache Failure';
+const String LOCATION_FAILURE_MESSAGE = 'Please provide location permission';
 const String INVALID_INPUT_FAILURE_MESSAGE =
     'Invalid Input - Not valid latitude or longitude value ';
 

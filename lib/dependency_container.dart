@@ -25,6 +25,7 @@ Future<void> init() async {
     () => RiseSetProvider(
       locator(),
       locator(),
+      locator(),
     ),
   );
 

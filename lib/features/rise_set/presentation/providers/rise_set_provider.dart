@@ -1,24 +1,52 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:rise_set/core/error/failures.dart';
+import 'package:rise_set/core/usecases/usecase.dart';
 import 'package:rise_set/core/util/constants.dart';
 import 'package:rise_set/core/util/input_converter.dart';
 import 'package:rise_set/features/rise_set/domain/entities/rise_set.dart';
 import 'package:rise_set/features/rise_set/domain/usecases/get_rise_and_set_time.dart';
+import 'package:rise_set/features/rise_set/domain/usecases/get_rise_set_time_from_my_location.dart';
 
 class RiseSetProvider extends ChangeNotifier with EquatableMixin {
   final GetRiseAndSetTimeFromCustomLocation getRiseAndSetTime;
+  final GetRiseSetTimeFromMyLocation getRiseSetTimeFromMyLocation;
   final InputConverter inputConverter;
   Status _status = Status.EMPTY;
   String _errorMessage;
   RiseSet _riseSet;
-  RiseSetProvider(this.getRiseAndSetTime, this.inputConverter)
+  RiseSetProvider(this.getRiseAndSetTime, this.inputConverter,
+      this.getRiseSetTimeFromMyLocation)
       : assert(getRiseAndSetTime != null),
+        assert(getRiseSetTimeFromMyLocation != null),
         assert(inputConverter != null);
 
   Status get status => _status;
   String get error => _errorMessage;
   RiseSet get riseSet => _riseSet;
+
+  Future<void> getRiseAndSetTimeFromMyLocation() async {
+    _status = Status.LOADING;
+    notifyListeners();
+
+    final failureOrRiseSet = await getRiseSetTimeFromMyLocation(NoParams());
+    failureOrRiseSet.fold(
+      (failure) {
+        _riseSet = null;
+        _status = Status.ERROR;
+        _errorMessage = _mapFailureToMessage(failure);
+        notifyListeners();
+        return;
+      },
+      (riseSet) {
+        _riseSet = riseSet;
+        _status = Status.LOADED;
+        notifyListeners();
+      },
+    );
+    notifyListeners();
+  }
+
   Future<void> getRiseSetTimesFromInput(
       String latitude, String longitude) async {
     _status = Status.LOADING;
@@ -84,6 +112,8 @@ class RiseSetProvider extends ChangeNotifier with EquatableMixin {
         return CACHE_FAILURE_MESSAGE;
       case InvalidInputFailure:
         return INVALID_INPUT_FAILURE_MESSAGE;
+      case LocationFailure:
+        return LOCATION_FAILURE_MESSAGE;
       default:
         return 'Unexpected error';
     }
