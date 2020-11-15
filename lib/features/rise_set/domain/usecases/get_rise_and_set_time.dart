@@ -11,7 +11,7 @@ class GetRiseAndSetTime implements UseCase<RiseSet, Params> {
   GetRiseAndSetTime(this.riseSetRepository);
 
   Future<Either<Failure, RiseSet>> call(Params params) async {
-    return await riseSetRepository.getRiseAndSetTime(
+    return await riseSetRepository.getRiseAndSetTimeFromCustomLocation(
         params.latitude, params.longitude);
   }
 }

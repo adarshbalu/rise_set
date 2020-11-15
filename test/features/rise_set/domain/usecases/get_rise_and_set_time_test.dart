@@ -20,12 +20,13 @@ void main() {
   final double latitude = 10;
   final double longitude = 20;
   test('should get RiseSet from repository', () async {
-    when(mockRiseSetRepository.getRiseAndSetTime(any, any))
+    when(mockRiseSetRepository.getRiseAndSetTimeFromCustomLocation(any, any))
         .thenAnswer((_) async => Right(riseSet));
     final result =
         await usecase.call(Params(latitude: latitude, longitude: longitude));
     expect(result, Right(riseSet));
-    verify(mockRiseSetRepository.getRiseAndSetTime(latitude, longitude));
+    verify(mockRiseSetRepository.getRiseAndSetTimeFromCustomLocation(
+        latitude, longitude));
     verifyNoMoreInteractions(mockRiseSetRepository);
   });
 }

@@ -2,9 +2,9 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 class Locations extends Equatable {
-  final double latitide, longitude;
+  final double latitude, longitude;
 
-  Locations({@required this.latitide, @required this.longitude});
+  Locations({@required this.latitude, @required this.longitude});
   @override
-  List<Object> get props => [latitide, longitude];
+  List<Object> get props => [latitude, longitude];
 }
