@@ -6,9 +6,9 @@ import 'package:rise_set/core/usecases/usecase.dart';
 import 'package:rise_set/features/rise_set/domain/entities/rise_set.dart';
 import 'package:rise_set/features/rise_set/domain/repositories/rise_set_repository.dart';
 
-class GetRiseAndSetTime implements UseCase<RiseSet, Params> {
+class GetRiseAndSetTimeFromCustomLocation implements UseCase<RiseSet, Params> {
   final RiseSetRepository riseSetRepository;
-  GetRiseAndSetTime(this.riseSetRepository);
+  GetRiseAndSetTimeFromCustomLocation(this.riseSetRepository);
 
   Future<Either<Failure, RiseSet>> call(Params params) async {
     return await riseSetRepository.getRiseAndSetTimeFromCustomLocation(

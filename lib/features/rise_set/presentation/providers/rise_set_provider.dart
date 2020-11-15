@@ -7,7 +7,7 @@ import 'package:rise_set/features/rise_set/domain/entities/rise_set.dart';
 import 'package:rise_set/features/rise_set/domain/usecases/get_rise_and_set_time.dart';
 
 class RiseSetProvider extends ChangeNotifier with EquatableMixin {
-  final GetRiseAndSetTime getRiseAndSetTime;
+  final GetRiseAndSetTimeFromCustomLocation getRiseAndSetTime;
   final InputConverter inputConverter;
   Status _status = Status.EMPTY;
   String _errorMessage;

@@ -25,7 +25,8 @@ Future<void> init() async {
   );
 
   //usecases
-  locator.registerLazySingleton(() => GetRiseAndSetTime(locator()));
+  locator.registerLazySingleton(
+      () => GetRiseAndSetTimeFromCustomLocation(locator()));
 
   //repository
 
